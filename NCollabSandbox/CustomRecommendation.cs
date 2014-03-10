@@ -8,15 +8,14 @@ using NCollab.Interfaces;
 
 namespace NCollabSandbox
 {
-    public class CustomRecommendation : Recommendation<CustomUser, CustomPreference>
+    public class CustomRecommendation : Recommendation<User, Preference>
     {
-        public CustomRecommendation(IMetric metric, IEqualityComparer<PreferencesBase> preferenceEqualityComparer, IEqualityComparer<UserBase> keyEqualityComparer) : base(metric, preferenceEqualityComparer, keyEqualityComparer)
+        public CustomRecommendation(IMetric<Preference> metric, IEqualityComparer<Preference> preferenceEqualityComparer, IEqualityComparer<User> userEqualityComparer) : base(metric, preferenceEqualityComparer, userEqualityComparer)
         {
         }
 
-        public override List<UserBase> LoadData()
+        public override List<User> LoadData()
         {
-            var user = new CustomUser();
             throw new NotImplementedException();
         }
     }

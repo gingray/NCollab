@@ -41,11 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomKeyEqualityComparer.cs" />
-    <Compile Include="CustomPreferenceEqualityComparer.cs" />
-    <Compile Include="CustomPreferences.cs" />
+    <Compile Include="UserEqualityComparer.cs" />
+    <Compile Include="PreferenceEqualityComparer.cs" />
+    <Compile Include="Preference.cs" />
     <Compile Include="CustomRecommendation.cs" />
-    <Compile Include="CustomUser.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

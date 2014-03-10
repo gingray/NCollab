@@ -7,14 +7,14 @@ using NCollab;
 
 namespace NCollabSandbox
 {
-    public class CustomKeyEqualityComparer : IEqualityComparer<UserBase>
+    public class PreferenceEqualityComparer : IEqualityComparer<Preference>
     {
-        public bool Equals(UserBase x, UserBase y)
+        public bool Equals(Preference x, Preference y)
         {
             throw new NotImplementedException();
         }
 
-        public int GetHashCode(UserBase obj)
+        public int GetHashCode(Preference obj)
         {
             throw new NotImplementedException();
         }

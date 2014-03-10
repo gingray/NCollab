@@ -7,28 +7,29 @@ using NCollab.Interfaces;
 
 namespace NCollab
 {
-    public abstract class Recommendation<TVal, TPref>
+    public abstract class Recommendation<TUser, TPref>
         where TPref : IPreference
+        where TUser : IUser<TPref>
     {
-        private readonly IMetric _metric;
-        private readonly IEqualityComparer<PreferencesBase> _preferenceEqualityComparer;
-        private readonly IEqualityComparer<UserBase> _keyEqualityComparer;
+        private readonly IMetric<TPref> _metric;
+        private readonly IEqualityComparer<TPref> _preferenceEqualityComparer;
+        private readonly IEqualityComparer<TUser> _userEqualityComparer;
 
-        protected Recommendation(IMetric metric, IEqualityComparer<PreferencesBase> preferenceEqualityComparer, IEqualityComparer<UserBase> keyEqualityComparer)
+        protected Recommendation(IMetric<TPref> metric, IEqualityComparer<TPref> preferenceEqualityComparer, IEqualityComparer<TUser> userEqualityComparer)
         {
             _metric = metric;
             _preferenceEqualityComparer = preferenceEqualityComparer;
-            _keyEqualityComparer = keyEqualityComparer;
+            _userEqualityComparer = userEqualityComparer;
         }
 
-        public abstract List<UserBase> LoadData();
+        public abstract List<TUser> LoadData();
 
-        public List<PreferencesBase> GetRecomendations(UserBase userBase, List<UserBase> others)
+        public List<TPref> GetRecomendations(TUser userBase, List<TUser> others)
         {
-            var simliarCoef = new Dictionary<UserBase, double>(_keyEqualityComparer);
+            var simliarCoef = new Dictionary<TUser, double>(_userEqualityComparer);
             foreach (var preferencese in userBase.Preferenceses)
             {
-                foreach (var other in others.Where(other => userBase != other).Where(other => other.Preferenceses.Contains(preferencese, _preferenceEqualityComparer)))
+                foreach (var other in others.Where(other => !_userEqualityComparer.Equals(userBase, other)).Where(other => other.Preferenceses.Contains(preferencese, _preferenceEqualityComparer)))
                 {
                     simliarCoef[other] = CalculateSimiliar(userBase, other);
                 }
@@ -42,9 +43,9 @@ namespace NCollab
             return result;
         }
 
-        protected virtual double CalculateSimiliar(UserBase mainUserBase, UserBase otherUserBase)
+        protected virtual double CalculateSimiliar(TUser mainUserBase, TUser otherUserBase)
         {
-            var prefs = mainUserBase.Preferenceses.Intersect(otherUserBase.Preferenceses, _preferenceEqualityComparer).ToList();
+            var prefs = mainUserBase.Preferenceses.Intersect(otherUserBase.Preferenceses,_preferenceEqualityComparer).ToList();
             var result = 0.0D;
             foreach (var preferencese in prefs)
             {

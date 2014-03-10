@@ -8,8 +8,9 @@ using NCollab.Interfaces;
 
 namespace NCollabSandbox
 {
-    public class CustomUser
+    public class User : IUser<Preference>
     {
         public string Name { get; set; }
+        public List<Preference> Preferenceses { get; private set; }
     }
 }

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NCollab.Interfaces;
 
-namespace NCollab
+namespace NCollab.Interfaces
 {
-    public abstract class UserBase
+    public interface IUser<TPref> where TPref : IPreference
     {
-        public List<PreferencesBase> Preferenceses;
+        List<TPref> Preferenceses { get; }
     }
 }

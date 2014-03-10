@@ -7,7 +7,7 @@ using NCollab.Interfaces;
 
 namespace NCollabSandbox
 {
-    public class CustomPreference : IPreference
+    public class Preference : IPreference
     {
         public string FilmName { get; set; }
         public double Compute()

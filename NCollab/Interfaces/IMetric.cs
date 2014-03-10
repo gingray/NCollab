@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace NCollab.Interfaces
 {
-    public interface IMetric
+    public interface IMetric<TPref> where TPref : IPreference
     {
-        double Compute(PreferencesBase val1, PreferencesBase val2);
+        double Compute(TPref val1, TPref val2);
     }
 }

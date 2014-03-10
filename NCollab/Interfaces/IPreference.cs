@@ -5,5 +5,6 @@ namespace NCollab.Interfaces
 {
     public interface IPreference : IComputable
     {
+
     }
 }
