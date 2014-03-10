@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,10 @@ namespace NCollabSandbox
     public class Preference : IPreference
     {
         public string FilmName { get; set; }
+        public double Rating { get; set; }
         public double Compute()
         {
-            throw new NotImplementedException();
+            return Rating;
         }
     }
 }

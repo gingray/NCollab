@@ -11,12 +11,12 @@ namespace NCollabSandbox
     {
         public bool Equals(Preference x, Preference y)
         {
-            throw new NotImplementedException();
+            return x.FilmName.Equals(y.FilmName);
         }
 
         public int GetHashCode(Preference obj)
         {
-            throw new NotImplementedException();
+            return obj.FilmName.GetHashCode();
         }
     }
 }

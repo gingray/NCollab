@@ -8,8 +8,8 @@ using NCollab.Interfaces;
 namespace NCollab
 {
     public abstract class Recommendation<TUser, TPref>
-        where TPref : IPreference
-        where TUser : IUser<TPref>
+        where TPref : class, IPreference
+        where TUser : class, IUser<TPref>
     {
         private readonly IMetric<TPref> _metric;
         private readonly IEqualityComparer<TPref> _preferenceEqualityComparer;
@@ -26,34 +26,25 @@ namespace NCollab
 
         public List<TPref> GetRecomendations(TUser userBase, List<TUser> others)
         {
-            var simliarCoef = new Dictionary<TUser, double>(_userEqualityComparer);
-            foreach (var preferencese in userBase.Preferenceses)
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<TUser, double> GetSimilars(TUser master, List<TUser> others)
+        {
+            var result = new Dictionary<TUser, double>(_userEqualityComparer);
+            foreach (var preferencese in master.Preferenceses)
             {
-                foreach (var other in others.Where(other => !_userEqualityComparer.Equals(userBase, other)).Where(other => other.Preferenceses.Contains(preferencese, _preferenceEqualityComparer)))
+                foreach (var other in others.Where(other => !_userEqualityComparer.Equals(master, other)).Where(other => other.Preferenceses.Contains(preferencese, _preferenceEqualityComparer)))
                 {
-                    simliarCoef[other] = CalculateSimiliar(userBase, other);
+                    result[other] = CalculateSimiliar(master, other);
                 }
             }
-            var result =
-                simliarCoef.ToList()
-                    .OrderByDescending(c => c.Value)
-                    .Select(s => s.Key.Preferenceses.Except(userBase.Preferenceses))
-                    .SelectMany(s => s)
-                    .ToList();
             return result;
         }
 
-        protected virtual double CalculateSimiliar(TUser mainUserBase, TUser otherUserBase)
+        protected double CalculateSimiliar(TUser mainUserBase, TUser otherUserBase)
         {
-            var prefs = mainUserBase.Preferenceses.Intersect(otherUserBase.Preferenceses,_preferenceEqualityComparer).ToList();
-            var result = 0.0D;
-            foreach (var preferencese in prefs)
-            {
-                var main = mainUserBase.Preferenceses.First(c => _preferenceEqualityComparer.Equals(c, preferencese));
-                var other = otherUserBase.Preferenceses.First(c => _preferenceEqualityComparer.Equals(c, preferencese));
-                result += _metric.Compute(main, other);
-            }
-            return result / prefs.Count;
+            return _metric.Compute(mainUserBase.Preferenceses, otherUserBase.Preferenceses,_preferenceEqualityComparer);
         }
     }
 }

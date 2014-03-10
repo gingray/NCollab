@@ -11,6 +11,6 @@ namespace NCollabSandbox
     public class User : IUser<Preference>
     {
         public string Name { get; set; }
-        public List<Preference> Preferenceses { get; private set; }
+        public List<Preference> Preferenceses { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,20 @@ using NCollab.Interfaces;
 
 namespace NCollab.Metrics
 {
-    public class Euclidian<TPref> : IMetric<TPref> where TPref: IPreference
+    public class Euclidian<TPref> : IMetric<TPref> where TPref: class, IPreference
     {
-        public double Compute(TPref val1, TPref val2)
+        public double Compute(List<TPref> val1, List<TPref> val2,IEqualityComparer<TPref> equalityComparer)
         {
-            return 1.0D / (1 + Math.Sqrt(Math.Pow(val1.Compute() - val2.Compute(), 2)));
+            var sum = 0.0d;
+            foreach (var pref in val1)
+            {
+                var item = val2.Find(c => equalityComparer.Equals(c, pref));
+                if(item == null)
+                    continue;               
+                sum += Math.Pow(pref.Compute() - item.Compute(), 2);
+            }
+
+            return 1.0D / (1 + Math.Sqrt(sum));
         }
     }
 }

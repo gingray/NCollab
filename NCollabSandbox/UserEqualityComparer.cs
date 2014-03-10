@@ -11,12 +11,12 @@ namespace NCollabSandbox
     {
         public bool Equals(User x, User y)
         {
-            throw new NotImplementedException();
+            return x.Name.Equals(y.Name);
         }
 
         public int GetHashCode(User obj)
         {
-            throw new NotImplementedException();
+            return obj.GetHashCode();
         }
     }
 }
