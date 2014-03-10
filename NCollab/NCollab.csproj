@@ -41,9 +41,9 @@
   <ItemGroup>
     <Compile Include="Interfaces\IComputable.cs" />
     <Compile Include="Interfaces\IMetric.cs" />
-    <Compile Include="Preferences.cs" />
+    <Compile Include="PreferencesBase.cs" />
     <Compile Include="Recommendation.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="UserBase.cs" />
     <Compile Include="Metrics\Euclidian.cs" />
     <Compile Include="Interfaces\IPreference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

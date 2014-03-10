@@ -10,7 +10,6 @@ namespace NCollabSandbox
 {
     public class CustomUser
     {
-        public int ID { get; set; }
-        public string Key { get; private set; }
+        public string Name { get; set; }
     }
 }

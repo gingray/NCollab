@@ -10,13 +10,13 @@ namespace NCollabSandbox
 {
     public class CustomRecommendation : Recommendation<CustomUser, CustomPreference>
     {
-        public CustomRecommendation(IMetric<CustomPreference> metric, IEqualityComparer<Preferences<CustomPreference>> preferenceEqualityComparer, IEqualityComparer<User<CustomUser, CustomPreference>> keyEqualityComparer) : base(metric, preferenceEqualityComparer, keyEqualityComparer)
+        public CustomRecommendation(IMetric metric, IEqualityComparer<PreferencesBase> preferenceEqualityComparer, IEqualityComparer<UserBase> keyEqualityComparer) : base(metric, preferenceEqualityComparer, keyEqualityComparer)
         {
         }
 
-        public override List<User<CustomUser, CustomPreference>> LoadData()
+        public override List<UserBase> LoadData()
         {
-            var user = new User<CustomUser, CustomPreference>();
+            var user = new CustomUser();
             throw new NotImplementedException();
         }
     }

@@ -7,10 +7,8 @@ using NCollab.Interfaces;
 
 namespace NCollab
 {
-    public class User<TVal, TPref>
-        where TPref : IPreference
+    public abstract class PreferencesBase : IPreference
     {
-        public TVal Value;
-        public List<Preferences<TPref>> Preferenceses;
+        public abstract double Compute();
     }
 }

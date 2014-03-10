@@ -11,13 +11,13 @@ namespace NCollabSandbox
     {
         static void Main(string[] args)
         {
-            var customRecommendation = new CustomRecommendation(new Euclidian<CustomPreference>(),
+            var customRecommendation = new CustomRecommendation(new Euclidian(),
                 new CustomPreferenceEqualityComparer(), new CustomKeyEqualityComparer());
             var users = customRecommendation.LoadData();
             var result = customRecommendation.GetRecomendations(users.First(), users.Skip(1).ToList());
             foreach (var preferencese in result)
             {
-                Console.WriteLine(preferencese.Value.FilmName);
+                Console.WriteLine(preferencese);
             }
         }
     }

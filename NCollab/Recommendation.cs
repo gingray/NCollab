@@ -10,47 +10,47 @@ namespace NCollab
     public abstract class Recommendation<TVal, TPref>
         where TPref : IPreference
     {
-        private readonly IMetric<TPref> _metric;
-        private readonly IEqualityComparer<Preferences<TPref>> _preferenceEqualityComparer;
-        private readonly IEqualityComparer<User<TVal, TPref>> _keyEqualityComparer;
+        private readonly IMetric _metric;
+        private readonly IEqualityComparer<PreferencesBase> _preferenceEqualityComparer;
+        private readonly IEqualityComparer<UserBase> _keyEqualityComparer;
 
-        protected Recommendation(IMetric<TPref> metric, IEqualityComparer<Preferences<TPref>> preferenceEqualityComparer, IEqualityComparer<User<TVal, TPref>> keyEqualityComparer)
+        protected Recommendation(IMetric metric, IEqualityComparer<PreferencesBase> preferenceEqualityComparer, IEqualityComparer<UserBase> keyEqualityComparer)
         {
             _metric = metric;
             _preferenceEqualityComparer = preferenceEqualityComparer;
             _keyEqualityComparer = keyEqualityComparer;
         }
 
-        public abstract List<User<TVal, TPref>> LoadData();
+        public abstract List<UserBase> LoadData();
 
-        public List<Preferences<TPref>> GetRecomendations(User<TVal, TPref> user, List<User<TVal, TPref>> others)
+        public List<PreferencesBase> GetRecomendations(UserBase userBase, List<UserBase> others)
         {
-            var simliarCoef = new Dictionary<User<TVal, TPref>, double>(_keyEqualityComparer);
-            foreach (var preferencese in user.Preferenceses)
+            var simliarCoef = new Dictionary<UserBase, double>(_keyEqualityComparer);
+            foreach (var preferencese in userBase.Preferenceses)
             {
-                foreach (var other in others.Where(other => user != other).Where(other => other.Preferenceses.Contains(preferencese, _preferenceEqualityComparer)))
+                foreach (var other in others.Where(other => userBase != other).Where(other => other.Preferenceses.Contains(preferencese, _preferenceEqualityComparer)))
                 {
-                    simliarCoef[other] = CalculateSimiliar(user, other);
+                    simliarCoef[other] = CalculateSimiliar(userBase, other);
                 }
             }
             var result =
                 simliarCoef.ToList()
                     .OrderByDescending(c => c.Value)
-                    .Select(s => s.Key.Preferenceses.Except(user.Preferenceses))
+                    .Select(s => s.Key.Preferenceses.Except(userBase.Preferenceses))
                     .SelectMany(s => s)
                     .ToList();
             return result;
         }
 
-        protected virtual double CalculateSimiliar(User<TVal, TPref> mainUser, User<TVal, TPref> otherUser)
+        protected virtual double CalculateSimiliar(UserBase mainUserBase, UserBase otherUserBase)
         {
-            var prefs = mainUser.Preferenceses.Intersect(otherUser.Preferenceses, _preferenceEqualityComparer).ToList();
+            var prefs = mainUserBase.Preferenceses.Intersect(otherUserBase.Preferenceses, _preferenceEqualityComparer).ToList();
             var result = 0.0D;
             foreach (var preferencese in prefs)
             {
-                var main = mainUser.Preferenceses.First(c => _preferenceEqualityComparer.Equals(c, preferencese));
-                var other = otherUser.Preferenceses.First(c => _preferenceEqualityComparer.Equals(c, preferencese));
-                result += _metric.Compute(main.Value, other.Value);
+                var main = mainUserBase.Preferenceses.First(c => _preferenceEqualityComparer.Equals(c, preferencese));
+                var other = otherUserBase.Preferenceses.First(c => _preferenceEqualityComparer.Equals(c, preferencese));
+                result += _metric.Compute(main, other);
             }
             return result / prefs.Count;
         }
