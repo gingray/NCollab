@@ -7,31 +7,31 @@ using NCollab.Interfaces;
 
 namespace NCollab
 {
-    public abstract class Recommendation<TUser, TPref>
+    public abstract class Recommendation<TMainObject, TPref>
         where TPref : class, IPreference
-        where TUser : class, IUser<TPref>
+        where TMainObject : class, IUser<TPref>
     {
         private readonly IMetric<TPref> _metric;
         private readonly IEqualityComparer<TPref> _preferenceEqualityComparer;
-        private readonly IEqualityComparer<TUser> _userEqualityComparer;
+        private readonly IEqualityComparer<TMainObject> _userEqualityComparer;
 
-        protected Recommendation(IMetric<TPref> metric, IEqualityComparer<TPref> preferenceEqualityComparer, IEqualityComparer<TUser> userEqualityComparer)
+        protected Recommendation(IMetric<TPref> metric, IEqualityComparer<TPref> preferenceEqualityComparer, IEqualityComparer<TMainObject> userEqualityComparer)
         {
             _metric = metric;
             _preferenceEqualityComparer = preferenceEqualityComparer;
             _userEqualityComparer = userEqualityComparer;
         }
 
-        public abstract List<TUser> LoadData();
+        public abstract List<TMainObject> LoadData();
 
-        public List<TPref> GetRecomendations(TUser userBase, List<TUser> others)
+        public List<TPref> GetRecomendations(TMainObject userBase, List<TMainObject> others)
         {
             throw new NotImplementedException();
         }
 
-        public Dictionary<TUser, double> GetSimilars(TUser master, List<TUser> others)
+        public Dictionary<TMainObject, double> GetSimilars(TMainObject master, List<TMainObject> others)
         {
-            var result = new Dictionary<TUser, double>(_userEqualityComparer);
+            var result = new Dictionary<TMainObject, double>(_userEqualityComparer);
             foreach (var preferencese in master.Preferenceses)
             {
                 foreach (var other in others.Where(other => !_userEqualityComparer.Equals(master, other)).Where(other => other.Preferenceses.Contains(preferencese, _preferenceEqualityComparer)))
@@ -42,9 +42,9 @@ namespace NCollab
             return result;
         }
 
-        protected double CalculateSimiliar(TUser mainUserBase, TUser otherUserBase)
+        protected double CalculateSimiliar(TMainObject mainObject, TMainObject otherObjects)
         {
-            return _metric.Compute(mainUserBase.Preferenceses, otherUserBase.Preferenceses,_preferenceEqualityComparer);
+            return _metric.Compute(mainObject.Preferenceses, otherObjects.Preferenceses,_preferenceEqualityComparer);
         }
     }
 }
