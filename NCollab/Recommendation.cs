@@ -24,9 +24,31 @@ namespace NCollab
 
         public abstract List<TMainObject> LoadData();
 
-        public List<TPref> GetRecomendations(TMainObject userBase, List<TMainObject> others)
+        public Dictionary<TPref, double> GetRecomendations(TMainObject mainObject, List<TMainObject> others)
         {
-            throw new NotImplementedException();
+            var similiar = GetSimilars(mainObject, others);
+            var result = new Dictionary<TPref, double>(_preferenceEqualityComparer);
+            var resultCount = new Dictionary<TPref, double>(_preferenceEqualityComparer);
+            foreach (var other in similiar.Keys)
+            {
+                if (_userEqualityComparer.Equals(mainObject, other))
+                    continue;
+                foreach (var otherPref in other.Preferenceses.Except(mainObject.Preferenceses,_preferenceEqualityComparer))
+                {
+                    if (!result.ContainsKey(otherPref))
+                    {
+                        result[otherPref] = 0.0D;
+                        resultCount[otherPref] = 0;
+                    }
+                    result[otherPref] += otherPref.Compute() * similiar[other];
+                    resultCount[otherPref] += similiar[other];
+                }
+            }
+            foreach (var d in new List<TPref>(result.Keys))
+            {
+                result[d] /= resultCount[d];
+            }
+            return result;
         }
 
         public Dictionary<TMainObject, double> GetSimilars(TMainObject master, List<TMainObject> others)
@@ -44,7 +66,7 @@ namespace NCollab
 
         protected double CalculateSimiliar(TMainObject mainObject, TMainObject otherObjects)
         {
-            return _metric.Compute(mainObject.Preferenceses, otherObjects.Preferenceses,_preferenceEqualityComparer);
+            return _metric.Compute(mainObject.Preferenceses, otherObjects.Preferenceses, _preferenceEqualityComparer);
         }
     }
 }
