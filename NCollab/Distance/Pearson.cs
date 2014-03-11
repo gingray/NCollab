@@ -14,24 +14,14 @@ namespace NCollab.Metrics
             var dict1 = val1.ToDictionary(k => k, v => v, equalityComparer);
             var dict2 = val2.ToDictionary(k => k, v => v, equalityComparer);
             var intesection = val1.Intersect(val2, equalityComparer).ToList();
-            var sum1 = 0.0D;
-            var sum2 = 0.0D;
-            var sumSq1 = 0.0D;
-            var sumSq2 = 0.0D;
-            var sumMul = 0.0D;
-            foreach (var pref in intesection)
-            {
-                sum1 += dict1[pref].Compute();
-                sum2 += dict2[pref].Compute();
-
-                sumSq1 += Math.Pow(dict1[pref].Compute(), 2);
-                sumSq2 += Math.Pow(dict2[pref].Compute(), 2);
-
-                sumMul += dict1[pref].Compute() * dict2[pref].Compute();
-            }
-
-            var num = (sum1*sum2)/intesection.Count;
-            throw new NotImplementedException();
+            var mean1 = intesection.Sum(s => dict1[s].Compute()) / intesection.Count;
+            var mean2 = intesection.Sum(s => dict2[s].Compute()) / intesection.Count;
+            var sum1 = intesection.Sum(pref => (dict1[pref].Compute() - mean1)*(dict2[pref].Compute() - mean2));
+            var sum2 =
+                Math.Sqrt(intesection.Sum(pref => (Math.Pow(dict1[pref].Compute() - mean1, 2))) * intesection.Sum(pref => Math.Pow(dict2[pref].Compute() - mean2, 2)));
+            if (sum2 == 0.0D)
+                return 0.0D;
+            return sum1/sum2;
         }
     }
 }

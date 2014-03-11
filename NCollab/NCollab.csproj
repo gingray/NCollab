@@ -42,9 +42,9 @@
     <Compile Include="Interfaces\IComputable.cs" />
     <Compile Include="Interfaces\IMetric.cs" />
     <Compile Include="Interfaces\IUser.cs" />
-    <Compile Include="Metrics\Pearson.cs" />
+    <Compile Include="Distance\Pearson.cs" />
     <Compile Include="Recommendation.cs" />
-    <Compile Include="Metrics\Euclidian.cs" />
+    <Compile Include="Distance\Euclidian.cs" />
     <Compile Include="Interfaces\IPreference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
