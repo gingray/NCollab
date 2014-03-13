@@ -10,8 +10,8 @@ namespace NCollabSandbox
 {
     public class CustomRecommendation : Recommendation<User, Preference>
     {
-        public CustomRecommendation(IMetric<Preference> metric, IEqualityComparer<Preference> preferenceEqualityComparer, IEqualityComparer<User> userEqualityComparer)
-            : base(metric, preferenceEqualityComparer, userEqualityComparer)
+        public CustomRecommendation(IMetric<Preference> metric)
+            : base(metric)
         {
         }
 

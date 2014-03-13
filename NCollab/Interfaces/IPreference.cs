@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NCollab.Interfaces
 {
-    public interface IPreference : IComputable
+    public interface IPreference<T> : IComputable,IEqualityComparer<T> where T : new()
     {
 
     }

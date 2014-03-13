@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NCollab.Interfaces;
 
-namespace NCollab.Interfaces
+namespace NCollab.Distance
 {
-    public interface IUser<TPref> where TPref : IPreference
+    public class BaseDistance<TPref> where TPref : IPreference<TPref>,new()
     {
-        List<TPref> Preferenceses { get; }
     }
 }

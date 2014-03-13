@@ -8,18 +8,18 @@ using NCollab.Interfaces;
 namespace NCollab
 {
     public abstract class Recommendation<TMainObject, TPref>
-        where TPref : class, IPreference
-        where TMainObject : class, IUser<TPref>
+        where TPref : class, IPreference<TPref>, new()
+        where TMainObject : class, IMainObject<TMainObject, TPref>, new()
     {
         private readonly IMetric<TPref> _metric;
-        private readonly IEqualityComparer<TPref> _preferenceEqualityComparer;
-        private readonly IEqualityComparer<TMainObject> _userEqualityComparer;
+        private IEqualityComparer<TPref> _preferenceEqualityComparer;
+        private IEqualityComparer<TMainObject> _userEqualityComparer;
 
-        protected Recommendation(IMetric<TPref> metric, IEqualityComparer<TPref> preferenceEqualityComparer, IEqualityComparer<TMainObject> userEqualityComparer)
+        protected Recommendation(IMetric<TPref> metric)
         {
             _metric = metric;
-            _preferenceEqualityComparer = preferenceEqualityComparer;
-            _userEqualityComparer = userEqualityComparer;
+            _preferenceEqualityComparer = new TPref();
+            _userEqualityComparer = new TMainObject();
         }
 
         public abstract List<TMainObject> LoadData();
@@ -33,7 +33,7 @@ namespace NCollab
             {
                 if (_userEqualityComparer.Equals(mainObject, other))
                     continue;
-                foreach (var otherPref in other.Preferenceses.Except(mainObject.Preferenceses,_preferenceEqualityComparer))
+                foreach (var otherPref in other.Preferenceses.Except(mainObject.Preferenceses, _preferenceEqualityComparer))
                 {
                     if (!result.ContainsKey(otherPref))
                     {
@@ -66,7 +66,7 @@ namespace NCollab
 
         protected double CalculateSimiliar(TMainObject mainObject, TMainObject otherObjects)
         {
-            return _metric.Compute(mainObject.Preferenceses, otherObjects.Preferenceses, _preferenceEqualityComparer);
+            return _metric.Compute(mainObject.Preferenceses, otherObjects.Preferenceses);
         }
     }
 }

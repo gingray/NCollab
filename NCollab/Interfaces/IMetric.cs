@@ -8,6 +8,6 @@ namespace NCollab.Interfaces
 {
     public interface IMetric<TPref>
     {
-        double Compute(List<TPref> val1, List<TPref> val2, IEqualityComparer<TPref> equalityComparer );
+        double Compute(List<TPref> val1, List<TPref> val2);
     }
 }

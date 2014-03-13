@@ -11,8 +11,7 @@ namespace NCollabSandbox
     {
         static void Main(string[] args)
         {
-            var customRecommendation = new CustomRecommendation(new Euclidian<Preference>(),
-                new PreferenceEqualityComparer(), new UserEqualityComparer());
+            var customRecommendation = new CustomRecommendation(new Euclidian<Preference>());
             var users = customRecommendation.LoadData();
             var result = customRecommendation.GetRecomendations(users.First(c => c.Name == "Toby"), users.ToList());
 

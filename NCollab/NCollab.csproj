@@ -39,9 +39,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Distance\BaseDistance.cs" />
     <Compile Include="Interfaces\IComputable.cs" />
     <Compile Include="Interfaces\IMetric.cs" />
-    <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Interfaces\IMainObject.cs" />
     <Compile Include="Distance\Pearson.cs" />
     <Compile Include="Recommendation.cs" />
     <Compile Include="Distance\Euclidian.cs" />
