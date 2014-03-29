@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NCollab;
 using NCollab.Metrics;
 
 namespace NCollabSandbox
@@ -17,7 +18,14 @@ namespace NCollabSandbox
 
             foreach (var item in result.ToList().OrderByDescending(c => c.Value))
             {
-                Console.WriteLine("{0} {1}",item.Key.FilmName, item.Value);
+                Console.WriteLine("{0} {1}", item.Key.FilmName, item.Value);
+            }
+            var pref = users.First().Preferenceses.First();
+            var invert = customRecommendation.GroupMainObjectsByPreference(users);
+            Console.WriteLine("Film \"{0}\" watched by :", pref.FilmName);
+            foreach (var item in invert[pref])
+            {
+                Console.WriteLine("{0} {1}", item.Name, item.Preferenceses.First(c => c.Equals(c, pref)).Rating);
             }
             Console.WriteLine("Done");
             Console.ReadLine();
